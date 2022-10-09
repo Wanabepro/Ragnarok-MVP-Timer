@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Timer</title>
+
+    <link type="image/x-icon" href="./favicon.ico" rel="shortcut icon">
+    <link type="Image/x-icon" href="/favicon.ico" rel="icon">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <img class="headerPic" src="./pics/logoRagnarok.png" alt="logo">
+    </header>
+
+    <img class="backgroundImage" id="backgroundImage1" src="./pics/tyan1.png" alt="Pinkhaired tyan">
+    <img class="backgroundImage" id="backgroundImage2" src="./pics/tyan2.png" alt="Greenhaired tyan">
+
+    <main class="container">
+        <div class="selectWrapper">
+            <select id="MVP_List">
+                <option hidden>Выбор MVP</option>
+            </select>
+        </div>
+
+        <div class="FlexContainer">
+            <div class="inputContainer">
+                <label class="inputLabel" for="X">Координата Х</label>
+                <input class="inputField" type="number" id="X">
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel" for="Y">Координата Y</label>
+                <input class="inputField" type="number" id="Y">
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel" for="DifferentTimeZone">Время</label>
+                <input class="inputField" type="time" id="DifferentTimeZone">
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel" for="DifferentTimeToRespawn">Изменить КДР</label>
+                <input class="inputField" type="time" id="DifferentTimeToRespawn">
+            </div>
+
+        </div>
+
+        <button id="mainBtn">Добавить</button>
+
+        <table id="table_mvps">
+            <thead>
+                <tr>
+                    <th>MVP</th>
+                    <th>Имя</th>
+                    <th>Карта</th>
+                    <th>Респавн</th>
+                    <th>Таймер</th>
+                </tr>
+            </thead>
+
+            <tbody id="MvpsInTable">
+            </tbody>
+        </table>
+    </main>
+</body>
+
+<script type="module" src="./index.js"></script>
+
+</html>

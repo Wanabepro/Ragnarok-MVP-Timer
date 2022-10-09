@@ -1,0 +1,233 @@
+[
+    {
+        "id": 1874,
+        "name": "Belzebu",
+        "respawn": [
+            {
+                "map": "abbey03",
+                "cdr": 43200000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 1583,
+        "name": "Tao Gunka",
+        "respawn": [
+            {
+                "map": "beach_dun",
+                "cdr": 18000000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 1734,
+        "name": "Kiel D-01",
+        "respawn": [
+            {
+                "map": "kh_dun02",
+                "cdr": 7200000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 1112,
+        "name": "Drake",
+        "respawn": [
+            {
+                "map": "treasure02",
+                "cdr": 7200000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 1312,
+        "name": "General Tartaruga",
+        "respawn": [
+            {
+                "map": "tur_dun04",
+                "cdr": 3600000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20943,
+        "name": "Death Witch",
+        "respawn": [
+            {
+                "map": "nif_dun02",
+                "cdr": 10800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 2251,
+        "name": "Gioia",
+        "respawn": [
+            {
+                "map": "gld2_ald",
+                "cdr": 28800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 3804,
+        "name": "Ominous Turtle General",
+        "respawn": [
+            {
+                "map": "tur_d04_i",
+                "cdr": 10800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20843,
+        "name": "Deep Sea Witch",
+        "respawn": [
+            {
+                "map": "iz_d04_i",
+                "cdr": 10980000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20811,
+        "name": "Deep Sea Kraken",
+        "respawn": [
+            {
+                "map": "iz_d05_i",
+                "cdr": 10800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 1768,
+        "name": "Gloom Under Night",
+        "respawn": [
+            {
+                "map": "ra_san05",
+                "cdr": 18000000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20618,
+        "name": "Bone Detardeurus",
+        "respawn": [
+            {
+                "map": "abyss_04",
+                "cdr": 43200000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20601,
+        "name": "Jewel Ungoliant",
+        "respawn": [
+            {
+                "map": "ein_dun03",
+                "cdr": 7200000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 2255,
+        "name": "Kades",
+        "respawn": [
+            {
+                "map": "gld2_gef",
+                "cdr": 28800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20520,
+        "name": "Chaos Baphomet",
+        "respawn": [
+            {
+                "map": "prt_mz03_i",
+                "cdr": 10800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20610,
+        "name": "Reginleif",
+        "respawn": [
+            {
+                "map": "odin_past",
+                "cdr": 28800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20928,
+        "name": "The one",
+        "respawn": [
+            {
+                "map": "amicitia2",
+                "cdr": 10800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20421,
+        "name": "C. Spider",
+        "respawn": [
+            {
+                "map": "gl_cas01_",
+                "cdr": 7200000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 2362,
+        "name": "N. Amon Ra",
+        "respawn": [
+            {
+                "map": "moc_prydn2",
+                "cdr": 3600000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 20934,
+        "name": "R001 Bestia",
+        "respawn": [
+            {
+                "map": "sp_rudus4",
+                "cdr": 10800000,
+                "max_delay": 600000
+            }
+        ]
+    },
+    {
+        "id": 3633,
+        "name": "Venomous Chimera",
+        "respawn": [
+            {
+                "map": "slabw01",
+                "cdr": 18000000,
+                "max_delay": 600000
+            }
+        ]
+    }
+]
