@@ -18,23 +18,51 @@ function generateOptionsForMvpList(mvpList) {
     })
 }
 
-function addActiveMvp(mvp) {
-    if (Object.keys(mvp).length !== 0 && activeMvps[mvp.id] === undefined) {
-        activeMvps[mvp.id] = {
-            cdr: createDateFromMs(mvp.respawn[0].cdr),
-            timeLeft: createDateFromMs(choseCdr(mvp)),
-            timerId: setInterval(timerHandlerCreator(mvp.id), 1000),
-            X: getX() || 0,
-            Y: getY() || 0,
-            name: mvp.name,
-            map: mvp.respawn[0].map
-        }
-    }
-}
-
 function removeActiveMvp(id) {
     clearInterval(activeMvps[id].timerId)
     delete activeMvps[id]
+}
+
+function addActiveMvp(mvp) {
+    if (Object.keys(mvp).length !== 0 && activeMvps[mvp.id] === undefined) {
+        activeMvps[mvp.id] = {}
+        activeMvps[mvp.id].cdr = createDateFromMs(mvp.respawn[0].cdr)
+        activeMvps[mvp.id].startTime = createStartTime()
+        activeMvps[mvp.id].realCdr = createDateFromMs(choseCdr(mvp))
+        activeMvps[mvp.id].endTime = createEndTime(activeMvps[mvp.id].startTime, activeMvps[mvp.id].realCdr)
+        activeMvps[mvp.id].timeLeft = createDateFromMs(activeMvps[mvp.id].endTime - new Date())
+        activeMvps[mvp.id].timerId = setInterval(timerHandlerCreator(mvp.id), 1000)
+        activeMvps[mvp.id].X = getX() || 0
+        activeMvps[mvp.id].Y = getY() || 0
+        activeMvps[mvp.id].name = mvp.name
+        activeMvps[mvp.id].map = mvp.respawn[0].map
+    }
+    console.log(activeMvps)
+}
+
+
+
+
+function createStartTime() {
+    if (document.getElementById('DifferentTimeZone').value === '') {
+        return new Date()
+    } else {
+        let field = document.getElementById('DifferentTimeZone').value.split(':').map(el => Number(el))
+
+        let result = new Date()
+        result.setHours(field[0])
+        result.setMinutes(field[1])
+
+        return result
+    }
+}
+
+function createDateFromMs(ms) {
+    let time = new Date(ms)
+
+    time.setHours(time.getHours() + time.getTimezoneOffset() / 60)
+
+    return time
 }
 
 function choseCdr(mvp) {
@@ -46,14 +74,16 @@ function choseCdr(mvp) {
     }
 }
 
-function createDateFromMs(ms) {
-    let result = new Date(ms)
-    let zero = new Date(0)
-
-    result.setHours(result.getHours() - zero.getHours())
+function createEndTime(startTime, cdr) {
+    let result = new Date(startTime)
+    result.setSeconds(result.getSeconds() + cdr.getSeconds())
+    result.setMinutes(result.getMinutes() + cdr.getMinutes())
+    result.setHours(result.getHours() + cdr.getHours())
 
     return result
 }
+
+
 
 function getX() {
     return Number(document.getElementById('X').value)
@@ -63,38 +93,7 @@ function getY() {
     return Number(document.getElementById('Y').value)
 }
 
-function finalTimeCalculation(timeLeft) {
-    let date = choseCurrentTime()
-    date.setHours(date.getHours() + timeLeft.getHours())
-    date.setMinutes(date.getMinutes() + timeLeft.getMinutes())
-    date.setSeconds(date.getSeconds() + timeLeft.getSeconds())
-
-    return `${date.getHours() < 10 ? '0' : ''}${date.getHours()}
-        : ${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}
-        : ${date.getSeconds() < 10 ? '0' : ''}${date.getSeconds()}`
-}
-
-function choseCurrentTime() {
-    if (document.getElementById('DifferentTimeZone').value === '') {
-        return new Date()
-    } else {
-        let result = document.getElementById('DifferentTimeZone').value.split(':')
-        result = new Date((result[0] * 60 * 60 + result[1] * 60) * 1000)
-        result.setHours(result.getHours() - new Date(0).getHours())
-        return result
-    }
-}
-
 //_________HANDLERS____________________
-
-function timerHandlerCreator(id) {
-    return function timerHandler() {
-        activeMvps[id].timeLeft.setSeconds(activeMvps[id].timeLeft.getSeconds() - 1)
-
-        renderTimer(id)
-    }
-}
-
 function onAddNewMvp() {
     const mvp = JSON.parse(document.getElementById('MVP_List').value === 'Выбор MVP'
         ? '{}'
@@ -109,20 +108,6 @@ function onAddNewMvp() {
 
 }
 
-function onReloadTimer() {
-    const mvpId = this.id.split('_')[0]
-
-    clearInterval(activeMvps[mvpId].timerId)
-    activeMvps[mvpId].timeLeft = new Date(activeMvps[mvpId].cdr)
-
-    activeMvps[mvpId].timerId = setInterval(timerHandlerCreator(mvpId), 1000)
-
-    console.log(mvpId, activeMvps)
-
-    removeInnerHTML()
-    renderActiveMvpsList()
-}
-
 function onRemoveMvp() {
     const mvpId = this.id.split('_')[0]
 
@@ -132,6 +117,32 @@ function onRemoveMvp() {
     removeInnerHTML()
     renderActiveMvpsList()
 }
+
+function timerHandlerCreator(id) {
+    return function timerHandler() {
+        activeMvps[id].timeLeft.setSeconds(activeMvps[id].timeLeft.getSeconds() - 1)
+
+        renderTimer(id)
+    }
+}
+
+function onReloadTimer() {
+    const mvpId = this.id.split('_')[0]
+
+    clearInterval(activeMvps[mvpId].timerId)
+
+    activeMvps[mvpId].startTime = createStartTime()
+    activeMvps[mvpId].realCdr = new Date(activeMvps[mvpId].cdr)
+    activeMvps[mvpId].endTime = createEndTime(activeMvps[mvpId].startTime, activeMvps[mvpId].cdr)
+    activeMvps[mvpId].timeLeft = createDateFromMs(activeMvps[mvpId].endTime - new Date())
+
+    activeMvps[mvpId].timerId = setInterval(timerHandlerCreator(mvpId), 1000)
+
+    removeInnerHTML()
+    renderActiveMvpsList()
+}
+
+
 
 
 //_________RENDERING___________________
@@ -163,7 +174,7 @@ function renderActiveMvp(mvpId) {
                 <p>@warp ${mvp.map}</p>
                 <p>(${activeMvps[mvpId].X} ; ${activeMvps[mvpId].Y})</p>
             </td>
-            <td id='${mvpId}moment'>${finalTimeCalculation(mvp.timeLeft)}</td>
+            <td id='${mvpId}moment'>${renderTimeString(activeMvps[mvpId].endTime)}</td>
             <td id='${mvpId}timer'></td>
             ${reloadIconStringCreator(mvpId)}
             ${removeIconStringCreator(mvpId)}
@@ -175,19 +186,14 @@ function renderActiveMvp(mvpId) {
 }
 
 function renderTimer(mvpId) {
-    document.getElementById(`${mvpId}timer`).innerHTML = renderTimerValue(mvpId)
+    document.getElementById(`${mvpId}timer`).innerHTML = renderTimeString(activeMvps[mvpId].timeLeft)
 }
 
-function renderTimerValue(mvpId) {
-    let time = activeMvps[mvpId].timeLeft
+function renderTimeString(time) {
 
     return `${time.getHours() < 10 ? '0' : ''}${time.getHours()}
         : ${time.getMinutes() < 10 ? '0' : ''}${time.getMinutes()}
         : ${time.getSeconds() < 10 ? '0' : ''}${time.getSeconds()}`
-}
-
-function renderRespawnMoment(id, timeString) {
-    document.getElementById(`${id}moment`).innerHTML = timeString
 }
 
 //________HELPERS_____________________

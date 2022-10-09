@@ -27,7 +27,7 @@
         "respawn": [
             {
                 "map": "kh_dun02",
-                "cdr": 7200000,
+                "cdr": 7380000,
                 "max_delay": 600000
             }
         ]
@@ -45,7 +45,7 @@
     },
     {
         "id": 1312,
-        "name": "General Tartaruga",
+        "name": "General Turtle",
         "respawn": [
             {
                 "map": "tur_dun04",
@@ -60,7 +60,7 @@
         "respawn": [
             {
                 "map": "nif_dun02",
-                "cdr": 10800000,
+                "cdr": 5400000,
                 "max_delay": 600000
             }
         ]
@@ -82,7 +82,7 @@
         "respawn": [
             {
                 "map": "tur_d04_i",
-                "cdr": 10800000,
+                "cdr": 10944000,
                 "max_delay": 600000
             }
         ]
@@ -126,7 +126,7 @@
         "respawn": [
             {
                 "map": "abyss_04",
-                "cdr": 43200000,
+                "cdr": 10800000,
                 "max_delay": 600000
             }
         ]
@@ -181,7 +181,7 @@
         "respawn": [
             {
                 "map": "amicitia2",
-                "cdr": 10800000,
+                "cdr": 5400000,
                 "max_delay": 600000
             }
         ]
@@ -192,7 +192,7 @@
         "respawn": [
             {
                 "map": "gl_cas01_",
-                "cdr": 7200000,
+                "cdr": 3780000,
                 "max_delay": 600000
             }
         ]
@@ -203,7 +203,7 @@
         "respawn": [
             {
                 "map": "moc_prydn2",
-                "cdr": 3600000,
+                "cdr": 3780000,
                 "max_delay": 600000
             }
         ]
@@ -214,7 +214,7 @@
         "respawn": [
             {
                 "map": "sp_rudus4",
-                "cdr": 10800000,
+                "cdr": 5400000,
                 "max_delay": 600000
             }
         ]
