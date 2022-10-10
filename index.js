@@ -37,9 +37,7 @@ function addActiveMvp(mvp) {
         activeMvps[mvp.id].name = mvp.name
         activeMvps[mvp.id].map = mvp.respawn[0].map
     }
-    console.log(activeMvps)
 }
-
 
 
 
@@ -101,7 +99,7 @@ function onAddNewMvp() {
 
     if (activeMvps[mvp.id] === undefined) {
         addActiveMvp(mvp)
-        removeInnerHTML()
+        removeInnerHTML('MvpsInTable')
         renderActiveMvpsList()
         clearFields()
     }
@@ -114,7 +112,7 @@ function onRemoveMvp() {
     clearInterval(activeMvps[mvpId].timerId)
     delete activeMvps[mvpId]
 
-    removeInnerHTML()
+    removeInnerHTML('MvpsInTable')
     renderActiveMvpsList()
 }
 
@@ -138,10 +136,35 @@ function onReloadTimer() {
 
     activeMvps[mvpId].timerId = setInterval(timerHandlerCreator(mvpId), 1000)
 
-    removeInnerHTML()
+    removeInnerHTML('MvpsInTable')
     renderActiveMvpsList()
 }
 
+function onMapClick(event) {
+    document.getElementById('modalWindowContainer').style = 'display: flex;'
+
+    const targetMap = this.id.split('-')[1]
+
+    const mapImg = document.createElement('img')
+    mapImg.src = `https://www.divine-pride.net/img/map/original/${targetMap}`
+    mapImg.alt = `${targetMap} map`
+
+    document.getElementById('modalWindowMap').appendChild(mapImg)
+}
+
+function onAccept() {
+    document.getElementById('modalWindowContainer').style = 'display: none;'
+
+    const mapImgParent = this.parentNode.previousElementSibling
+    mapImgParent.removeChild(mapImgParent.lastChild)
+}
+
+function onRefuse() {
+    document.getElementById('modalWindowContainer').style = 'display: none;'
+
+    const mapImgParent = this.parentNode.previousElementSibling
+    mapImgParent.removeChild(mapImgParent.lastChild)
+}
 
 
 
@@ -167,7 +190,7 @@ function renderActiveMvp(mvpId) {
             </td>
             <td>${mvp.name}</td>
             <td>
-                <figure class='map'>
+                <figure id='${mvpId}-${mvp.map}-map' class='map'>
                     <img src="https://www.divine-pride.net/img/map/original/${mvp.map}" alt="${mvp.map} map" />
                     <div class='dot' id='${mvpId}dot'></div>
                 </figure>
@@ -183,6 +206,7 @@ function renderActiveMvp(mvpId) {
     moveDot(activeMvps[mvpId].X, activeMvps[mvpId].Y, mvpId)
     document.getElementById(`${mvpId}_reloadButton`).addEventListener('click', onReloadTimer)
     document.getElementById(`${mvpId}_removeButton`).addEventListener('click', onRemoveMvp)
+    document.getElementById(`${mvpId}-${mvp.map}-map`).addEventListener('click', onMapClick)
 }
 
 function renderTimer(mvpId) {
@@ -198,8 +222,8 @@ function renderTimeString(time) {
 
 //________HELPERS_____________________
 
-function removeInnerHTML() {
-    const myNode = document.getElementById('MvpsInTable');
+function removeInnerHTML(id) {
+    const myNode = document.getElementById(id);
     while (myNode.firstChild) {
         myNode.removeChild(myNode.lastChild);
     }
@@ -237,3 +261,5 @@ function moveDot(x, y, mvpId) {
 fetchMvpList(generateOptionsForMvpList)
 
 document.getElementById('mainBtn').addEventListener('click', onAddNewMvp)
+document.getElementById('modalWindowButtonAccept').addEventListener('click', onAccept)
+document.getElementById('modalWindowButtonRefuse').addEventListener('click', onRefuse)
