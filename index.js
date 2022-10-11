@@ -37,9 +37,7 @@ function addActiveMvp(mvp) {
         activeMvps[mvp.id].name = mvp.name
         activeMvps[mvp.id].map = mvp.respawn[0].map
     }
-    console.log(activeMvps)
 }
-
 
 
 
@@ -101,7 +99,7 @@ function onAddNewMvp() {
 
     if (activeMvps[mvp.id] === undefined) {
         addActiveMvp(mvp)
-        removeInnerHTML()
+        removeInnerHTML('MvpsInTable')
         renderActiveMvpsList()
         clearFields()
     }
@@ -114,7 +112,7 @@ function onRemoveMvp() {
     clearInterval(activeMvps[mvpId].timerId)
     delete activeMvps[mvpId]
 
-    removeInnerHTML()
+    removeInnerHTML('MvpsInTable')
     renderActiveMvpsList()
 }
 
@@ -138,10 +136,103 @@ function onReloadTimer() {
 
     activeMvps[mvpId].timerId = setInterval(timerHandlerCreator(mvpId), 1000)
 
-    removeInnerHTML()
+    removeInnerHTML('MvpsInTable')
     renderActiveMvpsList()
 }
 
+function onMapClick(event) {
+    document.body.style.overflow = 'hidden'
+    document.getElementById('modalWindowContainer').style = 'display: flex;'
+
+    const [mvpId, targetMap] = this.id.split('-')
+
+    const mapImg = document.createElement('img')
+    mapImg.src = `https://www.divine-pride.net/img/map/original/${targetMap}`
+    mapImg.alt = `${targetMap} map`
+    mapImg.id = `modalWindow-${mvpId}-Map`
+
+    document.getElementById('modalWindowMap').appendChild(mapImg)
+
+    mapImg.onmousemove = onMouseMoveCreator(mapImg)
+
+    document.getElementById('modalWindowDot').addEventListener('click', (event) => onModalWindowDotClick(event, mvpId, mapImg))
+}
+
+function onMouseMoveCreator(mapImg) {
+    return function onMouseMove(event) {
+        document.getElementById('modalWindowButtonAccept').disabled = true
+        let windowX = event.clientX
+        let windowY = event.clientY
+
+        const mapImgDimensions = mapImg.getBoundingClientRect()
+
+        const x = windowX - mapImgDimensions.left - 3
+        const y = Math.abs(mapImgDimensions.bottom - mapImgDimensions.top - (windowY - mapImgDimensions.top + 3))
+
+        const dot = document.getElementById('modalWindowDot')
+
+        document.getElementById('modalWindowCoordinates').innerText = `
+        ${Math.round(x / dot.nextElementSibling.height * 256)} : ${Math.round(y / dot.nextElementSibling.height * 256)}`
+        dot.style.left = `${x}px`
+        dot.style.bottom = `${y}px`
+    }
+}
+
+function onModalWindowDotClick(event, mvpId, mapImg) {
+    event.stopPropagation()
+
+    const rawX = Number(event.target.style.left.slice(0, -2))
+    const rawY = Number(event.target.style.bottom.slice(0, -2))
+
+    const mapHeight = event.target.nextElementSibling.height
+
+    const x = rawX / mapHeight * 256
+    const y = rawY / mapHeight * 256
+
+    document.getElementById(`modalWindow-${mvpId}-Map`).onmousemove = null
+    document.getElementById(`modalWindow-${mvpId}-Map`).onclick = onModalMapClickCreator(mvpId, mapImg)
+
+    document.getElementById('modalWindowButtonAccept').disabled = false
+}
+
+function onModalMapClickCreator(mvpId, mapImg) {
+    return function onModalMapClick(event) {
+        console.log('onModalMapClick')
+        document.getElementById(`modalWindow-${mvpId}-Map`).onmousemove = onMouseMoveCreator(mapImg)
+    }
+}
+
+function onAccept() {
+    const mapImgParent = this.parentNode.previousElementSibling.previousElementSibling
+    const mvpId = mapImgParent.lastChild.id.split('-')[1]
+
+    const [x, y] = document.getElementById('modalWindowCoordinates').innerText.split(':').map(el => Number(el))
+    moveDotOnMiniature(x, y, mvpId)
+
+    document.getElementById(`${mvpId}_coordinates`).innerText = `(${x} ; ${y})`
+
+    document.getElementById('modalWindowContainer').style = 'display: none;'
+    document.body.style.overflow = ''
+
+    mapImgParent.removeChild(mapImgParent.lastChild)
+
+}
+
+function onRefuse() {
+    document.getElementById('modalWindowContainer').style = 'display: none;'
+    document.body.style.overflow = ''
+
+    const mapImgParent = this.parentNode.previousElementSibling.previousElementSibling
+    mapImgParent.removeChild(mapImgParent.lastChild)
+}
+
+function onModalWindowSurroundClick() {
+    document.getElementById('modalWindowContainer').style = 'display: none;'
+    document.body.style.overflow = ''
+
+    const mapImgParent = document.getElementById('modalWindowMap')
+    mapImgParent.removeChild(mapImgParent.firstElementChild.nextElementSibling)
+}
 
 
 
@@ -167,12 +258,12 @@ function renderActiveMvp(mvpId) {
             </td>
             <td>${mvp.name}</td>
             <td>
-                <figure class='map'>
+                <figure id='${mvpId}-${mvp.map}-map' class='map'>
                     <img src="https://www.divine-pride.net/img/map/original/${mvp.map}" alt="${mvp.map} map" />
                     <div class='dot' id='${mvpId}dot'></div>
                 </figure>
                 <p>@warp ${mvp.map}</p>
-                <p>(${activeMvps[mvpId].X} ; ${activeMvps[mvpId].Y})</p>
+                <p id='${mvpId}_coordinates' >(${activeMvps[mvpId].X} ; ${activeMvps[mvpId].Y})</p>
             </td>
             <td id='${mvpId}moment'>${renderTimeString(activeMvps[mvpId].endTime)}</td>
             <td id='${mvpId}timer'></td>
@@ -180,9 +271,10 @@ function renderActiveMvp(mvpId) {
             ${removeIconStringCreator(mvpId)}
     `
     document.getElementById('MvpsInTable').append(tr)
-    moveDot(activeMvps[mvpId].X, activeMvps[mvpId].Y, mvpId)
+    moveDotOnMiniature(activeMvps[mvpId].X, activeMvps[mvpId].Y, mvpId)
     document.getElementById(`${mvpId}_reloadButton`).addEventListener('click', onReloadTimer)
     document.getElementById(`${mvpId}_removeButton`).addEventListener('click', onRemoveMvp)
+    document.getElementById(`${mvpId}-${mvp.map}-map`).addEventListener('click', onMapClick)
 }
 
 function renderTimer(mvpId) {
@@ -198,8 +290,8 @@ function renderTimeString(time) {
 
 //________HELPERS_____________________
 
-function removeInnerHTML() {
-    const myNode = document.getElementById('MvpsInTable');
+function removeInnerHTML(id) {
+    const myNode = document.getElementById(id);
     while (myNode.firstChild) {
         myNode.removeChild(myNode.lastChild);
     }
@@ -227,7 +319,7 @@ function removeIconStringCreator(id) {
     </svg>`
 }
 
-function moveDot(x, y, mvpId) {
+function moveDotOnMiniature(x, y, mvpId) {
     document.getElementById(`${mvpId}dot`).style.left = `${x / 2}px`
     document.getElementById(`${mvpId}dot`).style.bottom = `${y / 2}px`
 }
@@ -237,3 +329,6 @@ function moveDot(x, y, mvpId) {
 fetchMvpList(generateOptionsForMvpList)
 
 document.getElementById('mainBtn').addEventListener('click', onAddNewMvp)
+document.getElementById('modalWindowButtonAccept').addEventListener('click', onAccept)
+document.getElementById('modalWindowButtonRefuse').addEventListener('click', onRefuse)
+document.getElementById('modalWindowContainer').addEventListener('click', onModalWindowSurroundClick)

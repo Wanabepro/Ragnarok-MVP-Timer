@@ -26,11 +26,9 @@
     <img class="backgroundImage" id="backgroundImage2" src="./pics/tyan2.png" alt="Greenhaired tyan">
 
     <main class="container">
-        <div class="selectWrapper">
-            <select id="MVP_List">
-                <option hidden>Выбор MVP</option>
-            </select>
-        </div>
+        <select id="MVP_List">
+            <option hidden>Выбор MVP</option>
+        </select>
 
         <div class="FlexContainer">
             <div class="inputContainer">
@@ -69,6 +67,21 @@
             </tbody>
         </table>
     </main>
+
+    <div id="modalWindowContainer">
+        <div id="modalWindow">
+            <div class="modalCenteredContainer">
+                <div id="modalWindowMap">
+                    <div id="modalWindowDot"></div>
+                </div>
+                <p class="modalWindowCoordinates" id="modalWindowCoordinates">00:00</p>
+                <div class="modalFlexContainer">
+                    <button class="modalButton" id="modalWindowButtonAccept">Подтвердить</button>
+                    <button class="modalButton" id="modalWindowButtonRefuse">Отклонить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script type="module" src="./index.js"></script>
