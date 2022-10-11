@@ -302,8 +302,8 @@ svg {
 
 #modalWindow {
     margin-top: 10vh;
-    width: 80vw;
     height: 80vh;
+    padding: 0 1vw;
 
     border-radius: 10px;
     background-color: #3f454c;
@@ -336,11 +336,12 @@ svg {
 #modalWindowDot {
     position: absolute;
 
-    bottom: 0;
-    left: 0;
+    bottom: -3px;
+    left: -3px;
 
-    width: 3px;
-    height: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
 
     background-color: #fff;
 }
