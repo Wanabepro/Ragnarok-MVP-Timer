@@ -346,6 +346,12 @@ svg {
     background-color: #fff;
 }
 
+.modalWindowCoordinates {
+    color: #d6f3f6;
+    display: block;
+    text-align: center;
+}
+
 .modalFlexContainer {
     width: min(60vh, 60vw);
     margin: 1em auto 0;
