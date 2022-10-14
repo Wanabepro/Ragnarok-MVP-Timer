@@ -33,14 +33,14 @@ body {
 #backgroundImage1 {
     width: 25vw;
     left: 0;
-    top: 20%;
+    top: 20vh;
     transform: translate(-18%, 50%);
 }
 
 #backgroundImage2 {
     width: 23vw;
     right: 3%;
-    top: 30%;
+    top: 30vh;
     transform: translate(25%, -50%);
 }
 
@@ -133,20 +133,6 @@ body {
     gap: 2%;
 }
 
-@media (max-width: 818px) {
-    .FlexContainer {
-        flex-wrap: wrap;
-    }
-
-    .inputContainer {
-        margin-top: 1em;
-    }
-
-    .inputContainer:first-child {
-        margin-top: 0;
-    }
-}
-
 #mainBtn {
     width: 100%;
 
@@ -190,6 +176,10 @@ th {
     padding: 16px;
 }
 
+.mobileTableHead {
+    display: none;
+}
+
 th:first-child {
     border-radius: 10px 0 0 10px;
 }
@@ -209,12 +199,14 @@ tr td:first-child {
     border-radius: 10px 0 0 10px;
 }
 
-tr td:nth-child(5) {
+tr td:last-child {
     border-radius: 0 10px 10px 0;
 }
 
 td img {
     max-height: 128px;
+    max-width: 128px;
+    width: 100%;
 }
 
 figure {
@@ -378,4 +370,46 @@ svg {
 .modalButton:hover {
     background-color: #a8b9cb;
     transform: translateY(-0.25rem)
+}
+
+@media (max-width: 818px) {
+    .headerPic {
+        width: 80vw;
+    }
+
+    .container {
+        width: 80vw;
+    }
+
+    .FlexContainer {
+        flex-wrap: wrap;
+    }
+
+    .inputContainer {
+        margin-top: 1em;
+    }
+
+    .inputContainer:first-child {
+        margin-top: 0;
+    }
+
+    .desctopTableHead {
+        display: none;
+    }
+
+    .mobileTableHead {
+        display: table-header-group;
+    }
+
+    th:last-child {
+        border-radius: 10px;
+    }
+
+    tr td:first-child {
+        border-radius: 10px;
+    }
+
+    .reload {
+        bottom: 4px;
+    }
 }
