@@ -1,5 +1,7 @@
 const activeMvps = {}
 
+
+
 //_________STATE MANAGEMENT____________
 
 function fetchMvpList(callback) {
@@ -32,8 +34,8 @@ function addActiveMvp(mvp) {
         activeMvps[mvp.id].endTime = createEndTime(activeMvps[mvp.id].startTime, activeMvps[mvp.id].realCdr)
         activeMvps[mvp.id].timeLeft = createDateFromMs(activeMvps[mvp.id].endTime - new Date())
         activeMvps[mvp.id].timerId = setInterval(timerHandlerCreator(mvp.id), 1000)
-        activeMvps[mvp.id].X = getX() || 0
-        activeMvps[mvp.id].Y = getY() || 0
+        activeMvps[mvp.id].X = 0
+        activeMvps[mvp.id].Y = 0
         activeMvps[mvp.id].name = mvp.name
         activeMvps[mvp.id].map = mvp.respawn[0].map
     }
@@ -91,7 +93,10 @@ function getY() {
     return Number(document.getElementById('Y').value)
 }
 
+
+
 //_________HANDLERS____________________
+
 function onAddNewMvp() {
     const mvp = JSON.parse(document.getElementById('MVP_List').value === 'Выбор MVP'
         ? '{}'
@@ -197,12 +202,14 @@ function onModalWindowDotClick(event, mvpId, mapImg) {
 
 function onModalMapClickCreator(mvpId, mapImg) {
     return function onModalMapClick(event) {
-        console.log('onModalMapClick')
+        event.stopPropagation()
         document.getElementById(`modalWindow-${mvpId}-Map`).onmousemove = onMouseMoveCreator(mapImg)
     }
 }
 
-function onAccept() {
+function onAccept(event) {
+    event.stopPropagation()
+
     const mapImgParent = this.parentNode.previousElementSibling.previousElementSibling
     const mvpId = mapImgParent.lastChild.id.split('-')[1]
 
@@ -218,7 +225,9 @@ function onAccept() {
 
 }
 
-function onRefuse() {
+function onRefuse(event) {
+    event.stopPropagation()
+
     document.getElementById('modalWindowContainer').style = 'display: none;'
     document.body.style.overflow = ''
 
@@ -252,11 +261,34 @@ function renderActiveMvp(mvpId) {
     const tr = document.createElement('tr')
     tr.id = mvpId
 
-    tr.innerHTML = `
+    const mediaQuery = window.matchMedia('(max-width: 818px)')
+
+    if (mediaQuery.matches) {
+        tr.innerHTML = `
+            <td>
+                <img src="https://static.divine-pride.net/images/mobs/png/${mvpId}.png" alt="${mvp.name} photo" />
+                <p>${mvp.name}</p>
+                
+                <figure id='${mvpId}-${mvp.map}-map' class='map'>
+                    <img src="https://www.divine-pride.net/img/map/original/${mvp.map}" alt="${mvp.map} map" />
+                    <div class='dot' id='${mvpId}dot'></div>
+                </figure>
+                <p>@warp ${mvp.map}</p>
+                <p id='${mvpId}_coordinates' >(${activeMvps[mvpId].X} ; ${activeMvps[mvpId].Y})</p>
+                
+                <p>Время респавна:</p>
+                <div id='${mvpId}moment'>${renderTimeString(activeMvps[mvpId].endTime)}</div>
+                <div id='${mvpId}timer'></div>
+            </td>
+            ${reloadIconStringCreator(mvpId)}
+            ${removeIconStringCreator(mvpId)}
+        `
+    } else {
+        tr.innerHTML = `
             <td>
                 <img src="https://static.divine-pride.net/images/mobs/png/${mvpId}.png" alt="${mvp.name} photo" />
             </td>
-            <td>${mvp.name}</td>
+            <td class='mvpTabelName'>${mvp.name}</td>
             <td>
                 <figure id='${mvpId}-${mvp.map}-map' class='map'>
                     <img src="https://www.divine-pride.net/img/map/original/${mvp.map}" alt="${mvp.map} map" />
@@ -269,9 +301,14 @@ function renderActiveMvp(mvpId) {
             <td id='${mvpId}timer'></td>
             ${reloadIconStringCreator(mvpId)}
             ${removeIconStringCreator(mvpId)}
-    `
+        `
+    }
+
+
     document.getElementById('MvpsInTable').append(tr)
+
     moveDotOnMiniature(activeMvps[mvpId].X, activeMvps[mvpId].Y, mvpId)
+
     document.getElementById(`${mvpId}_reloadButton`).addEventListener('click', onReloadTimer)
     document.getElementById(`${mvpId}_removeButton`).addEventListener('click', onRemoveMvp)
     document.getElementById(`${mvpId}-${mvp.map}-map`).addEventListener('click', onMapClick)
@@ -299,8 +336,6 @@ function removeInnerHTML(id) {
 
 function clearFields() {
     document.getElementById('MVP_List').value = 'Выбор MVP'
-    document.getElementById('X').value = ''
-    document.getElementById('Y').value = ''
     document.getElementById('DifferentTimeZone').value = ''
     document.getElementById('DifferentTimeToRespawn').value = ''
 }

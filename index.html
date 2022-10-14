@@ -32,14 +32,6 @@
 
         <div class="FlexContainer">
             <div class="inputContainer">
-                <label class="inputLabel" for="X">Координата Х</label>
-                <input class="inputField" type="number" id="X">
-            </div>
-            <div class="inputContainer">
-                <label class="inputLabel" for="Y">Координата Y</label>
-                <input class="inputField" type="number" id="Y">
-            </div>
-            <div class="inputContainer">
                 <label class="inputLabel" for="DifferentTimeZone">Время</label>
                 <input class="inputField" type="time" id="DifferentTimeZone">
             </div>
@@ -53,13 +45,19 @@
         <button id="mainBtn">Добавить</button>
 
         <table id="table_mvps">
-            <thead>
+            <thead class="desctopTableHead">
                 <tr>
                     <th>MVP</th>
-                    <th>Имя</th>
+                    <th class="mvpTabelName">Имя</th>
                     <th>Карта</th>
                     <th>Респавн</th>
                     <th>Таймер</th>
+                </tr>
+            </thead>
+
+            <thead class="mobileTableHead">
+                <tr>
+                    <th>Список MVP</th>
                 </tr>
             </thead>
 
